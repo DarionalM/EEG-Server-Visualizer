@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EEG Real-time Visualization</title>
+    <div id="globalContainer"></div> <!-- Contenedor para el gráfico -->
+    
+    <script src="https://code.highcharts.com/highcharts.js"></script> <!-- Highcharts para tiempo real -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js para descarga de la imagen -->
+    <script src="https://code.highcharts.com/modules/exporting.js"></script> <!-- Exportar para Highcharts -->
+    <script src="/socket.io/socket.io.js"></script> <!-- Socket.io -->
+    <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+
+    <style>
+        #container {
+            
+            min-width: 310px;
+            margin: 0 auto;
+        }
+        .download-btn {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        /* Estilos para el ícono de carga */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+            z-index: 1000;
+        }
+
+        .semi-circle {
+            width: 100px;
+            height: 50px;
+            border-top: 10px solid #3498db; /* Color del semicírculo */
+            border-right: 10px solid transparent;
+            border-left: 10px solid transparent;
+            border-radius: 100px 100px 0 0;  /* Crear el semicírculo */
+            animation: rotate 2s linear infinite; /* Animación de rotación */
+        }
+
+        /* Animación para rotar el semicírculo */
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Ocultar el ícono cuando el gráfico esté listo */
+        #loading-icon.hidden {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Visualización en tiempo real de señales EEG</h1>
+
+    <!-- Contenedor para el gráfico en tiempo real de Highcharts -->
+    <div id="container"></div>
+
+    <!-- Botones para descargar la imagen y los datos -->
+    <div class="download-btn">
+        <button id="downloadButton" onclick="createGlobalChart()">Descargar Gráfico de la sesión</button>
+        <button onclick="downloadData()">Descargar Datos</button>
+    </div>
+
+    <!-- Canvas para generar el gráfico de Chart.js (no visible) -->
+    <canvas id="downloadCanvas" style="display: none;"></canvas>
+
+    <script src="client.js"></script> <!-- Script del cliente -->
+</body>
+</html>
